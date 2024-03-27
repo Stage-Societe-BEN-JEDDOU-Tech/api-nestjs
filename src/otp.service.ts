@@ -34,25 +34,27 @@ export class OtpSerive{
         
     }
 
-    // async verifyOtp({identity, otp}: VerifyOtpDto){
-    //     try {
-    //         const queueOtp = await this.prisma.queueOtp.findUnique({
-    //             where: {identity, otp, type: "register"}
-    //         })
-    //         if (!queueOtp) {
-    //             throw new ForbiddenException()
-    //         }
+    async verifyOtp({mail, otp}: {mail: string, otp: string}){
+        try {
+            const queueOtp = await this.prisma.queueOtp.findUnique({
+                where: {mail, otp}
+            })
+            if (!queueOtp) {
+                throw new ForbiddenException({
+                    message: "code unverifed"
+                })
+            }
             
-    //         await this.prisma.queueOtp.delete({
-    //             where: queueOtp
-    //         })
+            // await this.prisma.queueOtp.delete({
+            //     where: queueOtp
+            // })
 
-    //         return {
-    //             error: false,
-    //             message: 'Verfication succesfully !'
-    //         }            
-    //     } catch (error) {
-    //         throw new InternalServerErrorException(error)
-    //     }
-    // }
+            return {
+                error: false,
+                message: 'Verfication succesfully !'
+            }            
+        } catch (error) {
+            throw new InternalServerErrorException(error)
+        }
+    }
 }

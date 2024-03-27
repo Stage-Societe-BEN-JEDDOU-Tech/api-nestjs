@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty } from "class-validator";
 
 export class CreateUserDTO{
 
@@ -11,9 +11,14 @@ export class CreateUserDTO{
     @IsNotEmpty()
     lastname: string
 
-    @IsNotEmpty()
+    @IsEmail({}, {
+        message: "Email invalid"
+    })
     mail: string
 
     @IsNotEmpty()
     resetKey: string
+
+    @IsNotEmpty()
+    otp: string
 }
