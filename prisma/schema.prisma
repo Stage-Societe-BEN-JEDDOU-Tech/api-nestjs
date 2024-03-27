@@ -22,8 +22,7 @@ model User {
   resetKey    String?
 }
 
-// model QueueOtp{
-//   otp String @id @unique
-//   identity String @unique
-//   type String
-// }
+model QueueOtp{
+  otp String @id @unique
+  mail String @unique
+}

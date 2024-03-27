@@ -10,6 +10,11 @@ export class AuthController {
 
     constructor(private readonly authService : AuthService){}
 
+    @Post('/sendOtp')
+    async sendOtp(@Body() {mail} : {mail: string}){
+        return await this.authService.sendOtp({mail})
+    }
+
     @Post('/register')
     async register(@Body() user : CreateUserDTO, @Query('otp') otp: string){
         console.log(otp);

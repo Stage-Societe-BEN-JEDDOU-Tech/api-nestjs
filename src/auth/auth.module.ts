@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt-strategy';
 import { MailService } from 'src/mailer.service';
 import { AuthService } from './auth.service';
+import { OtpSerive } from 'src/otp.service';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { AuthService } from './auth.service';
       signOptions: {expiresIn: '300s'}
     })
   ],
-  providers: [AuthService, PrismaService, JwtStrategy, MailService],
+  providers: [AuthService, PrismaService, JwtStrategy, MailService, OtpSerive],
   controllers: [AuthController]
 })
 export class AuthModule {}
