@@ -29,10 +29,12 @@
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.11.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/file-saver": "^2.0.7",
     "@types/passport-jwt": "^4.0.1",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "fs": "^0.0.1-security",
     "otp-generator": "^4.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -40,6 +42,7 @@
     "reflect-metadata": "^0.2.0",
     "resend": "^3.2.0",
     "rxjs": "^7.8.1",
+    "streamifier": "^0.1.1",
     "twilio": "^5.0.1"
   },
   "devDependencies": {
