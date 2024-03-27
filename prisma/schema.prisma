@@ -16,14 +16,14 @@ datasource db {
 
 model User {
   id        String  @id @unique
-  type      String
-  identity  String  @unique
-  password  String
-  domain    String?
+  firstname      String
+  lastname  String  @unique
+  mail  String
+  resetKey    String?
 }
 
-model QueueOtp{
-  otp String @id @unique
-  identity String @unique
-  type String
-}
+// model QueueOtp{
+//   otp String @id @unique
+//   identity String @unique
+//   type String
+// }

@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UsersService } from 'src/users/users.service';
 import { PrismaService } from 'src/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt-strategy';
-import { OtpSerive } from 'src/otp.service';
 import { MailService } from 'src/mailer.service';
-import { SmsService } from 'src/sms.service';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -17,7 +14,7 @@ import { SmsService } from 'src/sms.service';
       signOptions: {expiresIn: '300s'}
     })
   ],
-  providers: [AuthService, UsersService, PrismaService, JwtStrategy, OtpSerive, MailService, SmsService],
+  providers: [AuthService, PrismaService, JwtStrategy, MailService],
   controllers: [AuthController]
 })
 export class AuthModule {}
