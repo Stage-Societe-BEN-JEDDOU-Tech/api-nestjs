@@ -6,16 +6,17 @@ import { JwtStrategy } from './jwt-strategy';
 import { MailService } from 'src/mailer.service';
 import { AuthService } from './auth.service';
 import { OtpSerive } from 'src/otp.service';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Module({
   imports: [
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: {expiresIn: '300s'}
+      signOptions: {expiresIn: '2000s'}
     })
   ],
-  providers: [AuthService, PrismaService, JwtStrategy, MailService, OtpSerive],
+  providers: [AuthService, PrismaService, JwtStrategy, MailService, OtpSerive, CryptoService],
   controllers: [AuthController]
 })
 export class AuthModule {}
