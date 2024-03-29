@@ -11,7 +11,8 @@ export class AuthService {
     constructor(private readonly db: PrismaService,
         private readonly otpService: OtpSerive,
         private readonly jwtService: JwtService,
-        private readonly crypto: CryptoService){}
+        private readonly crypto: CryptoService)
+    {}
 
     async sendOtp({mail}: {mail: string}){
         return await this.otpService.sendOtp({mail})
@@ -20,10 +21,12 @@ export class AuthService {
     async register(user: CreateUserDTO){
 
         const verfied = await this.otpService.verifyOtp({mail: user.mail, otp: user.otp})
-        if (verfied) {
-            const badgePath = `src/Badges/DontShare${user.id}.badge`
-
-            
+        const existUser = await this.db.user.findFirst({
+            where: {mail: user.mail}
+        });
+        
+        if (verfied && !existUser) {
+            const badgePath = `src/Badges/DontShare${user.id}.badge`    
             try {
                 this.crypto.encrypting({
                     content: JSON.stringify({...user, otp: undefined}),
@@ -31,9 +34,9 @@ export class AuthService {
                 })
 
                 const userToCreate = {...user, otp: undefined}
-                this.db.user.create({
+                await this.db.user.create({
                     data: {...userToCreate}
-                })                
+                })
             } catch (error) {
                 throw new InternalServerErrorException(error)
             }
