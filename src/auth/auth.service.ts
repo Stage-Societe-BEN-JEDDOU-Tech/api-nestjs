@@ -41,8 +41,8 @@ export class AuthService {
             }
 
             return ({
-                pathBadge: `/badge?id=${user.id}`,
-                access_token: await this.jwtService.signAsync({id: user.id})
+                pathBadge: `auth/badge?id=${user.id}`,
+                access_token: this.jwtService.sign({id: user.id})
             })
         }else{
             throw new BadRequestException()
