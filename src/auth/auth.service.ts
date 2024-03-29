@@ -1,7 +1,6 @@
-import { Injectable, InternalServerErrorException, Res } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Res } from '@nestjs/common';
 import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { OtpSerive } from 'src/otp.service';
-import * as fs from 'node:fs'
 import { JwtService } from '@nestjs/jwt';
 import { CryptoService } from 'src/crypto/crypto.service';
 import { PrismaService } from 'src/prisma.service';
@@ -40,13 +39,13 @@ export class AuthService {
             } catch (error) {
                 throw new InternalServerErrorException(error)
             }
-            
-
 
             return ({
                 pathBadge: `/badge?id=${user.id}`,
                 access_token: await this.jwtService.signAsync({id: user.id})
             })
+        }else{
+            throw new BadRequestException()
         }
     }
 
