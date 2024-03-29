@@ -17,8 +17,5 @@ export class CreateUserDTO{
     mail: string
 
     @IsNotEmpty()
-    resetKey: string
-
-    @IsNotEmpty()
     otp: string
 }

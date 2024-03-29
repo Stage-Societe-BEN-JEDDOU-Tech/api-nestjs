@@ -1,15 +1,15 @@
-import { Injectable, Res } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Res } from '@nestjs/common';
 import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { OtpSerive } from 'src/otp.service';
 import * as fs from 'node:fs'
-import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import * as crypt from 'crypto-js'
 import { CryptoService } from 'src/crypto/crypto.service';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly otpService: OtpSerive,
+    constructor(private readonly db: PrismaService,
+        private readonly otpService: OtpSerive,
         private readonly jwtService: JwtService,
         private readonly crypto: CryptoService){}
 
@@ -21,36 +21,27 @@ export class AuthService {
 
         const verfied = await this.otpService.verifyOtp({mail: user.mail, otp: user.otp})
         if (verfied) {
+            const badgePath = `src/Badges/DontShare${user.id}.badge`
 
-            // const badgeContent = crypt.RC4Drop.encrypt(JSON.stringify(({...user, otp: undefined})), process.env.CRYPTO_KEY, {
-            //     drop: 1000
-            // });
-            // var decipher= crypt.RC4Drop.decrypt(badgeContent,process.env.CRYPTO_KEY, {
-            //     drop: 1000
-            // });
-            // console.log(decipher.);
             
-            const badgePath = `src/Badges/DontShare${user.id}.ds`
+            try {
+                this.crypto.encrypting({
+                    content: JSON.stringify({...user, otp: undefined}),
+                    path: badgePath
+                })
 
-// hosting data first
-
-            // fs.writeFile(badgePath, badgeContent.toString(), (err) => {
-            //     if (err) {
-            //       console.error(err);
-            //     } else {
-            //       console.log('Fichier .txt généré avec succès');
-            //     }
-            // });
-
-            this.crypto.encrypting({
-                content: JSON.stringify({...user, otp: undefined}),
-                path: badgePath
-            })
+                const userToCreate = {...user, otp: undefined}
+                this.db.user.create({
+                    data: {...userToCreate}
+                })                
+            } catch (error) {
+                throw new InternalServerErrorException(error)
+            }
             
+
+
             return ({
-                // encrypt: badgeContent,
-                // decrypt: decipher,
-                id: user.id,
+                pathBadge: `/badge?id=${user.id}`,
                 access_token: await this.jwtService.signAsync({id: user.id})
             })
         }

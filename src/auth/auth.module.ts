@@ -13,7 +13,7 @@ import { CryptoService } from 'src/crypto/crypto.service';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: {expiresIn: '2000s'}
+      signOptions: {expiresIn: '100s'}
     })
   ],
   providers: [AuthService, PrismaService, JwtStrategy, MailService, OtpSerive, CryptoService],

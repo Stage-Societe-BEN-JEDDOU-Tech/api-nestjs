@@ -19,7 +19,6 @@ model User {
   firstname      String
   lastname  String  @unique
   mail  String
-  resetKey    String?
 }
 
 model QueueOtp{

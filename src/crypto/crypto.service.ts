@@ -24,8 +24,4 @@ export class CryptoService {
             })
         });
     }
-
-    async decrypting(){
-        return;
-    }
 }

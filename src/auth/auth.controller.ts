@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, Query, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Request, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { AuthService } from './auth.service';
 import { SendOtp } from 'src/DTO/send-otp.dto';
 import { Response } from 'express';
+import * as fs from 'node:fs'
+import { FileInterceptor } from '@nestjs/platform-express';
 
 export type SigninBody = {identity: string, password: string}
 
@@ -23,24 +25,28 @@ export class AuthController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/getBadge')
+    @Get('/badge')
     getBadge(@Request() req, @Res() res: Response, @Query('id') idQuery: string){
-        console.log(req.user);
-        
         if (req.user) {
             const {id} = req.user;
             console.log({id, idQuery});
             
             if (id === idQuery) {
              
-            res.download(`src/Badges/DontShare${id}.ds`)
+                res.download(`src/Badges/DontShare${id}.ds`)
+                fs.rm(`src/Badges/DontShare${id}.ds`, (err) => {
+                    if (err) console.log(err);
+                    
+                })
             }
         }
     }
 
-    // @Get()
-    // getBadge(@Res() res: Response){
-    //     res.download('src/Badges/DontShare1.ds')
-    // }
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+        uploadFile(@UploadedFile() file: Express.Multer.File) {
+        console.log(file);
+        return file;
+    }
 
 }
