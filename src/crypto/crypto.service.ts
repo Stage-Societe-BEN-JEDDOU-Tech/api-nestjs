@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import * as fs from 'node:fs';
 import * as crypto from 'crypto'
 
@@ -22,25 +22,26 @@ export class CryptoService {
                 console.log('Contenu chiffré et écrit dans le fichier avec succès');
             }
         });
-    }
-    
-    
+    }    
 
     decrypting({ encryptedContent }: { encryptedContent: string }) {
         // Convertir l'IV à partir de la chaîne hexadécimale
         const iv = Buffer.from(encryptedContent.slice(0, 32), 'hex');
-        console.log(iv);
         
         // Extraire le contenu chiffré à partir de la chaîne hexadécimale
         const encryptedText = encryptedContent.slice(32);
         
-        // Créer un déchiffreur avec la même clé et IV
-        const decipher = crypto.createDecipheriv(this.algo, this.key, iv);
-        // Déchiffrer le contenu
-        let decryptedContent = decipher.update(encryptedText, 'hex', 'utf8');
-        decryptedContent += decipher.final('utf8');
-    
-        return decryptedContent;
+        try {
+            // Créer un déchiffreur avec la même clé et IV
+            const decipher = crypto.createDecipheriv(this.algo, this.key, iv);
+            // Déchiffrer le contenu
+            let decryptedContent = decipher.update(encryptedText, 'hex', 'utf8');
+            decryptedContent += decipher.final('utf8');
+
+            return decryptedContent;    
+        } catch (error) {
+            throw new ForbiddenException(error)
+        }
     }
     
 }

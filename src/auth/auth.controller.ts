@@ -53,7 +53,6 @@ export class AuthController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-        const encripted = file.buffer.toString()
-        return this.crypto.decrypting({encryptedContent: encripted})
+        return this.authService.login({file})
     }
 }

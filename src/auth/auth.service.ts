@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Res } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Res } from '@nestjs/common';
 import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { OtpSerive } from 'src/otp.service';
 import { JwtService } from '@nestjs/jwt';
 import { CryptoService } from 'src/crypto/crypto.service';
 import { PrismaService } from 'src/prisma.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -46,6 +47,22 @@ export class AuthService {
             })
         }else{
             throw new BadRequestException()
+        }
+    }
+
+    async login({file}: {file: Express.Multer.File}){
+        const encripted = file.buffer.toString()
+        const decripted : User = JSON.parse(this.crypto.decrypting({encryptedContent: encripted}))
+        
+        const existUser = await this.db.user.findUnique({
+            where: decripted
+        })
+
+        if(!existUser) throw new ForbiddenException()
+
+        return {
+            user: existUser,
+            access_token: this.jwtService.sign(existUser)
         }
     }
 
