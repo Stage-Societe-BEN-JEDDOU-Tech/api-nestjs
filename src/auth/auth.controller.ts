@@ -4,15 +4,17 @@ import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { AuthService } from './auth.service';
 import { SendOtp } from 'src/DTO/send-otp.dto';
 import { Response } from 'express';
-import * as fs from 'node:fs'
 import { FileInterceptor } from '@nestjs/platform-express';
+import * as fs from 'node:fs'
+import { CryptoService } from 'src/crypto/crypto.service';
 
 export type SigninBody = { identity: string, password: string }
 
 @Controller('auth')
 export class AuthController {
 
-    constructor(private readonly authService: AuthService) { }
+    constructor(private readonly authService: AuthService,
+        private readonly crypto: CryptoService) {}
 
     @Post('/sendOtp')
     async sendOtp(@Body() { mail }: SendOtp) {
@@ -24,8 +26,8 @@ export class AuthController {
         return await this.authService.register(req)
     }
 
-    @Get('/badge')
     @UseGuards(JwtAuthGuard)
+    @Get('/badge')
     getBadge(@Request() req, @Res() res: Response, @Query('id') idQuery: string) {
         console.log(req.user);
         if (req.user) {
@@ -43,7 +45,7 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Get()
-    autho(@Request() req) {
+    auth(@Request() req) {
         const id = req.user.id;
         return { id }
     }
@@ -51,8 +53,7 @@ export class AuthController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-        console.log(file);
-        return file;
+        const encripted = file.buffer.toString()
+        return this.crypto.decrypting({encryptedContent: encripted})
     }
-
 }
