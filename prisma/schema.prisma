@@ -18,10 +18,10 @@ model User {
   id        String  @id @unique
   firstname      String
   lastname  String  @unique
-  mail  String
+  email  String
 }
 
 model QueueOtp{
   otp String @id @unique
-  mail String @unique
+  email String @unique
 }

@@ -14,8 +14,8 @@ export class AuthService {
         private readonly crypto: CryptoService)
     {}
 
-    async sendOtp({mail}: {mail: string}){
-        return await this.otpService.sendOtp({mail})
+    async sendOtp({email}: {email: string}){
+        return await this.otpService.sendOtp({email})
     }
     
     async register(user: CreateUserDTO){

@@ -14,7 +14,7 @@ export class CreateUserDTO{
     @IsEmail({}, {
         message: "Email invalid"
     })
-    mail: string
+    email: string
 
     @IsNotEmpty()
     otp: string

@@ -31,11 +31,11 @@ export class MailService{
         }
     }
 
-    async sendOtp({otp, mail}: {otp: string, mail: string}){
+    async sendOtp({otp, email}: {otp: string, email: string}){
         try {
             const data = await this.mailer.emails.send({
                 from: 'onboarding@resend.dev',
-                to: mail,
+                to: email,
                 subject: 'Verification Code',
                 html: `<p>Your Verification code is:</p>
                 <h1>${otp}</h1>`,

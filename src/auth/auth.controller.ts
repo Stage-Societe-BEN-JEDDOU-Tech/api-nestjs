@@ -17,8 +17,8 @@ export class AuthController {
         private readonly crypto: CryptoService) {}
 
     @Post('/sendOtp')
-    async sendOtp(@Body() { mail }: SendOtp) {
-        return await this.authService.sendOtp({ mail })
+    async sendOtp(@Body() { email }: SendOtp) {
+        return await this.authService.sendOtp({ email })
     }
 
     @Post('/register')

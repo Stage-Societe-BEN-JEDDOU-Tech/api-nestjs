@@ -9,14 +9,14 @@ export class OtpSerive{
         private readonly prisma: PrismaService){}
 
     private generateOtp(){
-        return generate(6, {upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false});
+        return generate(4, {upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false});
     }
 
-    async sendOtp({mail}: {mail: string}){
+    async sendOtp({email}: {email: string}){
         const otp = this.generateOtp();
 
         const existQueue = await this.prisma.queueOtp.findUnique({
-            where: {mail}
+            where: {email}
         })
 
         if (existQueue) {
@@ -25,9 +25,9 @@ export class OtpSerive{
 
         try {
             await this.prisma.queueOtp.create({
-                data: {otp, mail}
+                data: {otp, email}
             })
-            return await this.mailer.sendOtp({otp, mail});
+            return await this.mailer.sendOtp({otp, email});
         } catch (error) {
             throw new InternalServerErrorException(error)
         }
