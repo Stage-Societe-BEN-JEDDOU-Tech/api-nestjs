@@ -34,7 +34,7 @@ export class OtpSerive{
         
     }
 
-    async verifyOtp({mail, otp}: {mail: string, otp: string}){
+    async verifyOtp({email, otp}: {email: string, otp: string}){
         try {
             const queueOtp = await this.prisma.queueOtp.findUnique({
                 where: {email, otp}

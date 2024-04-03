@@ -20,9 +20,9 @@ export class AuthService {
     
     async register(user: CreateUserDTO){
 
-        const verfied = await this.otpService.verifyOtp({mail: user.mail, otp: user.otp})
+        const verfied = await this.otpService.verifyOtp({email: user.email, otp: user.otp})
         const existUser = await this.db.user.findFirst({
-            where: {mail: user.mail}
+            where: {email: user.email}
         });
         
         if (verfied && !existUser) {
