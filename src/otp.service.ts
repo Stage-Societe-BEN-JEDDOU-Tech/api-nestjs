@@ -45,9 +45,9 @@ export class OtpSerive{
                 })
             }
             
-            // await this.prisma.queueOtp.delete({
-            //     where: queueOtp
-            // })
+            await this.prisma.queueOtp.delete({
+                where: queueOtp
+            })
 
             return {
                 error: false,
