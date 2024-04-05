@@ -25,29 +25,29 @@ export class AuthService {
             where: {email: user.email}
         });
         
-        if (verfied && !existUser) {
-            const badgePath = `src/Badges/DontShare${user.id}.badge`    
-            try {
-                this.crypto.encrypting({
-                    content: JSON.stringify({...user, otp: undefined}),
-                    path: badgePath
-                })
+        if(!verfied) throw new ForbiddenException()
+        if(existUser) throw new BadRequestException()
 
-                const userToCreate = {...user, otp: undefined}
-                await this.db.user.create({
-                    data: {...userToCreate}
-                })
-            } catch (error) {
-                throw new InternalServerErrorException(error)
-            }
-
-            return ({
-                pathBadge: `auth/badge?id=${user.id}`,
-                access_token: this.jwtService.sign({id: user.id})
+        const badgePath = `src/Badges/DontShare${user.id}.badge`    
+        try {
+            this.crypto.encrypting({
+                content: JSON.stringify({...user, otp: undefined}),
+                path: badgePath
             })
-        }else{
-            throw new BadRequestException()
+
+            const userToCreate = {...user, otp: undefined}
+            await this.db.user.create({
+                data: {...userToCreate}
+            })
+        } catch (error) {
+            throw new InternalServerErrorException(error)
         }
+
+        return ({
+            pathBadge: `auth/badge?id=${user.id}`,
+            access_token: this.jwtService.sign({id: user.id})
+        })
+        
     }
 
     async login({file}: {file: Express.Multer.File}){

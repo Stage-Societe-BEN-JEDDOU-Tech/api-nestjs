@@ -1,5 +1,5 @@
 import { generate } from "otp-generator";
-import { ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotImplementedException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { MailService } from "./mailer.service";
 import { PrismaService } from "./prisma.service";
 
@@ -18,43 +18,49 @@ export class OtpSerive{
         const existQueue = await this.prisma.queueOtp.findUnique({
             where: {email}
         })
+        const existUser = await this.prisma.user.findFirst({
+            where: {email}
+        })
+
+        if (existUser) throw new ConflictException()
 
         if (existQueue) {
-            throw new ConflictException()
+            await this.prisma.queueOtp.delete({
+                where: existQueue
+            })
         }
 
         try {
-            await this.prisma.queueOtp.create({
+            return await this.prisma.queueOtp.create({
                 data: {otp, email}
             })
-            return await this.mailer.sendOtp({otp, email});
+            //return await this.mailer.sendOtp({otp, email});
         } catch (error) {
-            throw new InternalServerErrorException(error)
+            await this.prisma.queueOtp.delete({
+                where: {email}
+            })
+            throw new InternalServerErrorException('good trying')
         }
         
     }
 
     async verifyOtp({email, otp}: {email: string, otp: string}){
-        try {
-            const queueOtp = await this.prisma.queueOtp.findUnique({
-                where: {email, otp}
+        const queueOtp = await this.prisma.queueOtp.findUnique({
+            where: {email, otp}
+        })
+        if (!queueOtp) {
+            throw new ForbiddenException({
+                message: "code unverifed"
             })
-            if (!queueOtp) {
-                throw new ForbiddenException({
-                    message: "code unverifed"
-                })
-            }
-            
-            await this.prisma.queueOtp.delete({
-                where: queueOtp
-            })
+        }
+        
+        await this.prisma.queueOtp.delete({
+            where: queueOtp
+        })
 
-            return {
-                error: false,
-                message: 'Verfication succesfully !'
-            }            
-        } catch (error) {
-            throw new InternalServerErrorException(error)
+        return {
+            error: false,
+            message: 'Verfication succesfully !'
         }
     }
 }
