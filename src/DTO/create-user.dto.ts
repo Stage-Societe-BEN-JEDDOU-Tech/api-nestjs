@@ -14,6 +14,7 @@ export class CreateUserDTO{
     @IsEmail({}, {
         message: "Email invalid"
     })
+    @IsNotEmpty()
     email: string
 
     @IsNotEmpty()

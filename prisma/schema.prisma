@@ -25,3 +25,9 @@ model QueueOtp{
   otp String @id @unique
   email String @unique
 }
+
+model Domain{
+  appId String @id @unique
+  host String
+  key String
+}

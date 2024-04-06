@@ -50,7 +50,7 @@ export class AuthController {
         return { id }
     }
 
-    @Post('upload')
+    @Post('login')
     @UseInterceptors(FileInterceptor('file'))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
         return this.authService.login({file})
