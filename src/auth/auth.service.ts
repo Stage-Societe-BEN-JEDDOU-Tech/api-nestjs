@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Res } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { OtpSerive } from 'src/otp.service';
 import { JwtService } from '@nestjs/jwt';
@@ -13,6 +13,16 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly crypto: CryptoService)
     {}
+
+    async getUser({id}) : Promise<User>{
+        const existUser = await this.db.user.findUnique({
+            where: {id}
+        })
+
+        if (!existUser) throw new NotFoundException()
+
+        return existUser;
+    }
 
     async sendOtp({email}: {email: string}){
         return await this.otpService.sendOtp({email})

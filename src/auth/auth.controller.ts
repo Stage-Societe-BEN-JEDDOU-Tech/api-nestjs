@@ -13,8 +13,7 @@ export type SigninBody = { identity: string, password: string }
 @Controller('auth')
 export class AuthController {
 
-    constructor(private readonly authService: AuthService,
-        private readonly crypto: CryptoService) {}
+    constructor(private readonly authService: AuthService) {}
 
     @Post('/sendOtp')
     async sendOtp(@Body() { email }: SendOtp) {
@@ -47,7 +46,7 @@ export class AuthController {
     @Get()
     auth(@Request() req) {
         const id = req.user.id;
-        return { id }
+        return this.authService.getUser({id})
     }
 
     @Post('login')

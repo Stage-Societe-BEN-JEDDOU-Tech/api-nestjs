@@ -31,10 +31,10 @@ export class OtpSerive{
         }
 
         try {
-            return await this.prisma.queueOtp.create({
+            await this.prisma.queueOtp.create({
                 data: {otp, email}
             })
-            //return await this.mailer.sendOtp({otp, email});
+            return await this.mailer.sendOtp({otp, email});
         } catch (error) {
             await this.prisma.queueOtp.delete({
                 where: {email}
