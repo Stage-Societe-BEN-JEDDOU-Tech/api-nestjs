@@ -76,4 +76,31 @@ export class AuthService {
         }
     }
 
+    async tryLogin({file}: {file: Express.Multer.File}){
+        const encripted = file.buffer.toString()
+        const decripted : User = JSON.parse(this.crypto.decrypting({encryptedContent: encripted}))
+        
+        const existUser = await this.db.user.findUnique({
+            where: decripted
+        })
+
+        if(!existUser) throw new ForbiddenException()
+
+        return {
+            user: existUser
+        }
+    }
+
+    verifyUserToken(token: string){
+        try{
+            const decoded = this.jwtService.verify(token, {
+                secret: process.env.JWT_SECRET
+            })
+
+            return {user: decoded}
+        }catch(error){
+            throw new BadRequestException('token invalid')
+        }
+    }
+
 }

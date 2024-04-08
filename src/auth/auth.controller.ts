@@ -6,7 +6,6 @@ import { SendOtp } from 'src/DTO/send-otp.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'node:fs'
-import { CryptoService } from 'src/crypto/crypto.service';
 
 export type SigninBody = { identity: string, password: string }
 
@@ -51,7 +50,18 @@ export class AuthController {
 
     @Post('login')
     @UseInterceptors(FileInterceptor('file'))
-    uploadFile(@UploadedFile() file: Express.Multer.File) {
+    login(@UploadedFile() file: Express.Multer.File) {
         return this.authService.login({file})
+    }
+
+    @Post('try-login')
+    @UseInterceptors(FileInterceptor('file'))
+    tryLogin(@UploadedFile() file: Express.Multer.File) {
+        return this.authService.login({file})
+    }
+
+    @Get('/verify')
+    verifyUserToken(@Body() {token}: {token: string}){
+        return this.authService.verifyUserToken(token)
     }
 }
