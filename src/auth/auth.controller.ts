@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Request, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Request, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CreateUserDTO } from 'src/DTO/create-user.dto';
 import { AuthService } from './auth.service';
@@ -6,6 +6,7 @@ import { SendOtp } from 'src/DTO/send-otp.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'node:fs'
+import { VerifyTokenDto } from 'src/DTO/verify-token.dto';
 
 export type SigninBody = { identity: string, password: string }
 
@@ -61,7 +62,9 @@ export class AuthController {
     }
 
     @Get('/verify')
-    verifyUserToken(@Body() {token}: {token: string}){
-        return this.authService.verifyUserToken(token)
+    verifyUserToken(@Query('token') tokenGuardian){
+        console.log(tokenGuardian);
+        
+        return this.authService.verifyUserToken(tokenGuardian)
     }
 }
