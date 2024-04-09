@@ -28,6 +28,5 @@ model QueueOtp{
 
 model Domain{
   appId String @id @unique
-  host String
   key String
 }
