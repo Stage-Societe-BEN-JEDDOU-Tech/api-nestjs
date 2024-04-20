@@ -27,6 +27,6 @@ model QueueOtp{
 }
 
 model Domain{
-  appId String @id @unique
-  key String
+  appId String @id @default(uuid())
+  secretKey String @unique @default(cuid())
 }

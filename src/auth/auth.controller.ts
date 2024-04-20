@@ -64,7 +64,6 @@ export class AuthController {
     @Get('/verify')
     verifyUserToken(@Query('token') tokenGuardian){
         console.log(tokenGuardian);
-        
         return this.authService.verifyUserToken(tokenGuardian)
     }
 }
