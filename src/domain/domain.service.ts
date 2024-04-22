@@ -13,10 +13,13 @@ export class DomainService {
     }
 
     async LoginDomain(@Body() identification: loginDomainDto){
+        console.log(identification);
+        
         const existDomain = await this.prismaService.domain.findUnique({
             where: identification
         })
-
+        console.log(existDomain);
+        
         if(!existDomain) return {
             error: true,
             exception: new UnauthorizedException()

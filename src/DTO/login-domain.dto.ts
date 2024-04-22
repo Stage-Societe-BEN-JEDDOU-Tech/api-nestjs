@@ -8,5 +8,5 @@ export class loginDomainDto{
 
     @IsNotEmpty()
     @IsString()
-    secretkey: string
+    secretKey: string
 }

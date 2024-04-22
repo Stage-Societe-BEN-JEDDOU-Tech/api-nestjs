@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { DomainService } from './domain.service';
 import { loginDomainDto } from 'src/DTO/login-domain.dto';
 
@@ -7,7 +7,8 @@ export class DomainController {
     constructor(private readonly domainService: DomainService){}
 
     @Post('/auth')
-    async loginDomain(@Body() identification: loginDomainDto){
-        return await this.domainService.LoginDomain(identification)
+    async loginDomain(@Query('identification') identification: string){
+
+        return await this.domainService.LoginDomain(JSON.parse(identification))
     }
 }
