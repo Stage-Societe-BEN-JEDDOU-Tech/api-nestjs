@@ -6,7 +6,7 @@ import { loginDomainDto } from 'src/DTO/login-domain.dto';
 export class DomainController {
     constructor(private readonly domainService: DomainService){}
 
-    @Post()
+    @Post('/auth')
     async loginDomain(@Body() identification: loginDomainDto){
         return await this.domainService.LoginDomain(identification)
     }

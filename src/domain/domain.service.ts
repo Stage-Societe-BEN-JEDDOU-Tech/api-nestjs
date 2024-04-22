@@ -20,7 +20,10 @@ export class DomainService {
         if(!existDomain) throw new UnauthorizedException()
 
         return {
-            error: false
+            error: false,
+            data: {
+                domain: existDomain
+            }
         }
     }
 }
