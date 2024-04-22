@@ -17,7 +17,10 @@ export class DomainService {
             where: identification
         })
 
-        if(!existDomain) throw new UnauthorizedException()
+        if(!existDomain) return {
+            error: true,
+            exception: new UnauthorizedException()
+        }
 
         return {
             error: false,

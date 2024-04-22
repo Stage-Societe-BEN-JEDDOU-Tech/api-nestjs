@@ -42,13 +42,6 @@ export class AuthController {
         }
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get()
-    auth(@Request() req) {
-        const id = req.user.id;
-        return this.authService.getUser({id})
-    }
-
     @Post('login')
     @UseInterceptors(FileInterceptor('file'))
     login(@UploadedFile() file: Express.Multer.File) {
@@ -61,9 +54,10 @@ export class AuthController {
         return this.authService.login({file})
     }
 
-    @Get('/verify')
-    verifyUserToken(@Query('token') tokenGuardian){
-        console.log(tokenGuardian);
-        return this.authService.verifyUserToken(tokenGuardian)
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    auth(@Request() req) {
+        const id = req.user.id;
+        return this.authService.getUser({id})
     }
 }

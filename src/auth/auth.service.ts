@@ -15,13 +15,17 @@ export class AuthService {
     {}
 
     async getUser({id}) : Promise<User>{
-        const existUser = await this.db.user.findUnique({
-            where: {id}
-        })
+        try {
+            const existUser = await this.db.user.findUnique({
+                where: {id}
+            })
+            if (!existUser) throw new NotFoundException()
 
-        if (!existUser) throw new NotFoundException()
-
-        return existUser;
+            return existUser;
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 
     async sendOtp({email}: {email: string}){
