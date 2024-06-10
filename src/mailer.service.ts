@@ -37,12 +37,15 @@ export class MailService{
                 from: 'onboarding@resend.dev',
                 to: email,
                 subject: 'Verification Code',
-                html: `<p>Your Verification code is:</p>
-                <h1>${otp}</h1>`,
+                html: `
+                <div>
+                    <p>Your Verification code is:</p>
+                    <h1 style="font-size: 2rem">${otp}</h1>
+                </div>`,
                 cc: 'hei.fabrich.2@gmail.com'
             })
 
-            console.log(data.data);
+            console.log(data);
             return {
                 error: false,
                 message: 'Verification Code sent !'

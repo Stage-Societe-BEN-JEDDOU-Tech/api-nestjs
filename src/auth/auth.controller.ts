@@ -7,13 +7,16 @@ import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'node:fs'
 import { VerifyTokenDto } from 'src/DTO/verify-token.dto';
+import { JwtService } from '@nestjs/jwt';
 
 export type SigninBody = { identity: string, password: string }
 
 @Controller('auth')
 export class AuthController {
 
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly jwt: JwtService) {}
 
     @Post('/sendOtp')
     async sendOtp(@Body() { email }: SendOtp) {
@@ -40,6 +43,16 @@ export class AuthController {
                 })
             }
         }
+    }
+
+    @Get('/reget')
+    regetBadge(@Query('email') email: string){
+        return this.authService.regetBadge(email)
+    }
+
+    @Get('got')
+    gotBadge(@Query('token') token: string, @Res() res: Response){
+        return this.authService.got(token, res)
     }
 
     @Post('login')

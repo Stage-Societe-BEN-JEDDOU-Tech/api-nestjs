@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { DomainService } from './domain.service';
-import { loginDomainDto } from 'src/DTO/login-domain.dto';
 
 @Controller('domain')
 export class DomainController {
