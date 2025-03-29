@@ -27,18 +27,19 @@ model Seller {
 model Post {
   id          Int        @id @default(autoincrement())
   title       String
-  description String?
+  description String
   photo       String[]
   condition   String[]
   adress      String
   city        String
-  Price       Float
+  price       Float
   view        Int        @default(0)
   seller      Seller     @relation(fields: [sellerId], references: [id])
   categories  Category[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   sellerId    Int
+  archived    Boolean    @default(false)
 }
 
 model Category {
