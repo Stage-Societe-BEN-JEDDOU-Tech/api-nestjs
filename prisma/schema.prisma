@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Buyer {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  contact String[]
-  name    String?
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  contact  String[]
+  name     String?
+  password String
 }
 
 model Seller {
@@ -19,6 +20,7 @@ model Seller {
   name      String?
   email     String    @unique
   contact   String[]
+  password  String
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   Post      Post[]

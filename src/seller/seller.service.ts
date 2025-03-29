@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { hashSync } from 'bcrypt';
 import { SellerDTO } from 'src/DTO/seller';
 import { PrismaService } from 'src/prisma.service';
 
@@ -6,10 +7,11 @@ import { PrismaService } from 'src/prisma.service';
 export class SellerService {
   constructor(private readonly db: PrismaService) {}
 
-  async create(data: SellerDTO) {
+  async create(data: SellerDTO, password: string) {
     try {
+      const hashed = hashSync(password, 10);
       await this.db.seller.create({
-        data,
+        data: { ...data, password: hashed },
       });
     } catch (error) {
       throw new InternalServerErrorException(error);

@@ -7,8 +7,8 @@ export class SellerController {
   constructor(private readonly service: SellerService) {}
 
   @Post()
-  create(@Body() data: SellerDTO) {
-    return this.service.create(data);
+  create(@Body() data: SellerDTO, @Query('password') password: string) {
+    return this.service.create(data, password);
   }
 
   @Put()
