@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { CryptoModule } from './crypto/crypto.module';
-import { DomainModule } from './domain/domain.module';
+import { BuyerModule } from './buyer/buyer.module';
+import { SellerModule } from './seller/seller.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    DomainModule,
-    AuthModule,
-    CryptoModule
+    BuyerModule,
+    SellerModule,
   ],
 })
 export class AppModule {}
