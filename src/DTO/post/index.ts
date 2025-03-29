@@ -1,5 +1,5 @@
 import { Post } from '@prisma/client';
-import { InitialOmit } from '../types';
+import { InitialOmit } from '../global';
 import { IsArray, IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class PostDTO implements Omit<Post, InitialOmit | 'view'> {
