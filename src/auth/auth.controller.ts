@@ -1,3 +1,8 @@
+import { Controller } from '@nestjs/common';
+
+@Controller('auth')
+export class AuthController {}
+
 // import { Body, Controller, Get, Post, Query, Req, Request, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 // import { JwtAuthGuard } from './jwt-auth.guard';
 // import { CreateUserDTO } from 'src/DTO/create-user.dto';
