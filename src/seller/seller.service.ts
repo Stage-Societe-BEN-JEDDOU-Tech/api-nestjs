@@ -20,7 +20,7 @@ export class SellerService {
   async create(data: SellerDTO, password: string) {
     try {
       const hashed = hashSync(password, 10);
-      await this.db.seller.create({
+      return await this.db.seller.create({
         data: { ...data, password: hashed },
       });
     } catch (error) {
@@ -30,7 +30,7 @@ export class SellerService {
 
   async update(id: number, data: SellerDTO) {
     try {
-      await this.db.seller.update({
+      return await this.db.seller.update({
         data,
         where: {
           id,

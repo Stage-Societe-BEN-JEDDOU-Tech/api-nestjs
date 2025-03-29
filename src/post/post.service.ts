@@ -8,7 +8,7 @@ export class PostService {
 
   async create(data: PostDTO) {
     try {
-      await this.db.post.create({
+      return await this.db.post.create({
         data,
       });
     } catch (error) {
@@ -18,10 +18,50 @@ export class PostService {
 
   async update(id: number, data: PostDTO) {
     try {
-      await this.db.post.update({
+      return await this.db.post.update({
         data,
         where: {
           id,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async getAll() {
+    try {
+      return await this.db.post.findMany({
+        select: {
+          city: true,
+          title: true,
+          id: true,
+          isAvailable: true,
+          isSold: true,
+          photo: true,
+          price: true,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async getOne(id: number) {
+    try {
+      await this.db.post.update({
+        where: { id },
+        data: {
+          view: {
+            increment: 1,
+          },
+        },
+      });
+      return await this.db.post.findUnique({
+        where: { id },
+        include: {
+          categories: true,
+          seller: true,
         },
       });
     } catch (error) {

@@ -41,7 +41,8 @@ model Post {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   sellerId    Int
-  archived    Boolean    @default(false)
+  isAvailable Boolean    @default(false)
+  isSold      Boolean    @default(false)
 }
 
 model Category {

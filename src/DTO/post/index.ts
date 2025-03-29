@@ -20,5 +20,7 @@ export class PostDTO implements Omit<Post, InitialOmit | 'view'> {
   @IsNumber()
   sellerId: number;
   @IsBoolean()
-  archived: boolean;
+  isAvailable: boolean;
+  @IsBoolean()
+  isSold: boolean;
 }

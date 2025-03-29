@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { PostService } from './post.service';
 import { RoleGuard } from 'src/role-guard/role.guard';
 import { PostDTO } from 'src/DTO/post';
@@ -17,5 +25,15 @@ export class PostController {
   @Put()
   update(@Body() data: PostDTO, @Query('id') id: string) {
     return this.service.update(Number(id), data);
+  }
+
+  @Get('/all')
+  getAll() {
+    return this.service.getAll();
+  }
+
+  @Get()
+  getOne(@Query('id') id: string) {
+    return this.service.getOne(Number(id));
   }
 }
