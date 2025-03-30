@@ -6,6 +6,7 @@ import { PostModule } from './post/post.module';
 import { AuthService } from './auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma.service';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PrismaService } from './prisma.service';
     BuyerModule,
     SellerModule,
     PostModule,
+    BookingModule,
   ],
   providers: [AuthService, JwtService, PrismaService],
 })

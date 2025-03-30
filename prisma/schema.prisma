@@ -13,6 +13,7 @@ model Buyer {
   contact  String[]
   name     String?
   password String
+  Book     Book[]
 }
 
 model Seller {
@@ -43,6 +44,7 @@ model Post {
   sellerId    Int
   isAvailable Boolean    @default(false)
   isSold      Boolean    @default(false)
+  Book        Book[]
 }
 
 model Category {
@@ -51,4 +53,26 @@ model Category {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   Post      Post[]
+}
+
+model Book {
+  id        Int       @id @default(autoincrement())
+  post      Post      @relation(fields: [postId], references: [id])
+  buyer     Buyer     @relation(fields: [buyerId], references: [id])
+  postId    Int
+  buyerId   Int
+  message   String?
+  isSold    Boolean   @default(false)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  Message   Message[]
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String
+  book      Book     @relation(fields: [bookId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookId    Int
 }
